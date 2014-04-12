@@ -117,24 +117,6 @@ app.get('/api/fans', function(req, res) {
         }));
     });
 });
-app.get('/add', function(req, res) {
-    var fs = require('fs');
-    fs.readFile('records.txt', 'utf-8', function(err, data) {
-        var dataArray = data.split('\n');
-        for (var i = 0; i < dataArray.length; i += 2) {
-            var fans = new Fans({ 
-                createdAt: new Date(dataArray[i]),
-                likes: parseInt(dataArray[i + 1]) 
-            });
-            fans.save(function (err) {
-                if (err) {
-                    console.log('err:', err);
-                }
-            });
-        }
-        res.end(data);
-    });
-});
 
 http.createServer(app).listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
