@@ -11,7 +11,9 @@
         "jade": "*",
         "request": "2",
         "mongoose": "*",
-        "newrelic": "1.5"
+        "newrelic": "1.5",
+        "moment-timezone": "*",
+        "underscore": "*"
     },
     "repository": {
         "type": "git",

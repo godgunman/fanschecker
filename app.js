@@ -11,8 +11,12 @@ var user = require('./routes/user');
 var http = require('http');
 var path = require('path');
 
+var moment = require('moment-timezone');
 var request = require('request');
 var mongoose = require('mongoose');
+var Schema = mongoose.Schema;
+
+process.env.TZ = 'Asia/Taipei';
 
 // Here we find an appropriate database to connect to, defaulting to
 // localhost if we don't find one.
@@ -24,18 +28,26 @@ var uristring =
 // Makes connection asynchronously.  Mongoose will queue up database
 // operations and release them when the connection is complete.
 mongoose.connect(uristring, function (err, res) {
-  if (err) {
-  console.log ('ERROR connecting to: ' + uristring + '. ' + err);
-  } else {
-  console.log ('Succeeded connected to: ' + uristring);
-  }
+    if (err) {
+        console.log ('ERROR connecting to: ' + uristring + '. ' + err);
+    } else {
+        console.log ('Succeeded connected to: ' + uristring);
+    }
 });
 
-var Fans = mongoose.model('Fans', { 
+var FansSchema = new Schema({ 
     pageId: String,
     likes: Number,
     createdAt: { type: Date, default: Date.now },
 });
+FansSchema.methods.toJSON = function() {
+    var obj = this.toObject();
+    delete obj._id;
+    delete obj.__v;
+    obj.createdAt = moment(obj.createdAt).tz('Asia/Taipei').format();
+    return obj;
+}
+var Fans = mongoose.model('Fans', FansSchema);
 
 var app = express();
 
@@ -64,6 +76,8 @@ app.get('/api/fans', function(req, res) {
     var start = new Date(req.query.start);
     var end = new Date(req.query.end);
 
+    console.log(start, end);
+
     if (!skip) skip = 0;
     if (!limit) limit = 1000;
 
@@ -85,14 +99,16 @@ app.get('/api/fans', function(req, res) {
     .limit(limit)
     .exec(function(err, result) {
         var previous = undefined;
-        
+
         if (result.length ) {
-            previous = req.protocol + '://' + req.get('host') + '/api/fans?limit=' + limit + '&end=' + encodeURIComponent(result[result.length-1].createdAt);
+            var date = moment(result[result.length - 1].createdAt).tz('Asia/Taipei').format();
+            previous = req.protocol + '://' + req.get('host') + '/api/fans?limit=' + limit + '&end=' + encodeURIComponent(date);
         }
-          
+
         res.end(JSON.stringify({
             options: {
-                query: query,
+                start: req.query.start,
+                end: req.query.end,
                 skip: skip,
                 limit: limit,
             },
