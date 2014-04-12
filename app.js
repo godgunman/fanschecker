@@ -69,7 +69,6 @@ if ('development' == app.get('env')) {
 }
 
 app.get('/', routes.index);
-app.get('/users', user.list);
 app.get('/api/fans', function(req, res) {
     var skip = req.query.skip ;
     var limit = req.query.limit;
@@ -116,6 +115,24 @@ app.get('/api/fans', function(req, res) {
             size: result.length,
             result: result,
         }));
+    });
+});
+app.get('/add', function(req, res) {
+    var fs = require('fs');
+    fs.readFile('records.txt', 'utf-8', function(err, data) {
+        var dataArray = data.split('\n');
+        for (var i = 0; i < dataArray.length; i += 2) {
+            var fans = new Fans({ 
+                createdAt: new Date(dataArray[i]),
+                likes: parseInt(dataArray[i + 1]) 
+            });
+            fans.save(function (err) {
+                if (err) {
+                    console.log('err:', err);
+                }
+            });
+        }
+        res.end(data);
     });
 });
 
