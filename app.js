@@ -7,6 +7,7 @@ require('newrelic');
 var express = require('express');
 var routes = require('./routes');
 var user = require('./routes/user');
+
 var http = require('http');
 var path = require('path');
 
@@ -57,6 +58,50 @@ if ('development' == app.get('env')) {
 
 app.get('/', routes.index);
 app.get('/users', user.list);
+app.get('/api/fans', function(req, res) {
+    var skip = req.query.skip ;
+    var limit = req.query.limit;
+    var start = new Date(req.query.start);
+    var end = new Date(req.query.end);
+
+    if (!skip) skip = 0;
+    if (!limit) limit = 1000;
+
+    var query = {};
+    var dateFilter = {};
+    if (start && start != 'Invalid Date') {
+        dateFilter['$gte'] = start;
+    }
+    if (end && end != 'Invalid Date') {
+        dateFilter['$lt'] = end;
+    }
+    if (dateFilter['$get'] || dateFilter['$lt'])
+        query['createdAt'] = dateFilter;
+
+    Fans
+    .find(query)
+    .sort('-createdAt')
+    .skip(skip)
+    .limit(limit)
+    .exec(function(err, result) {
+        var previous = undefined;
+        
+        if (result.length ) {
+            previous = req.protocol + '://' + req.get('host') + '/api/fans?limit=' + limit + '&end=' + encodeURIComponent(result[result.length-1].createdAt);
+        }
+          
+        res.end(JSON.stringify({
+            options: {
+                query: query,
+                skip: skip,
+                limit: limit,
+            },
+            previous: previous,
+            size: result.length,
+            result: result,
+        }));
+    });
+});
 
 http.createServer(app).listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
