@@ -9,7 +9,8 @@
     "dependencies": {
         "express": "3.4.8",
         "jade": "*",
-        "request": "2"
+        "request": "2",
+        "mongoose": "*"
     },
     "repository": {
         "type": "git",
