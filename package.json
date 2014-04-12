@@ -10,7 +10,8 @@
         "express": "3.4.8",
         "jade": "*",
         "request": "2",
-        "mongoose": "*"
+        "mongoose": "*",
+        "newrelic": "1.5"
     },
     "repository": {
         "type": "git",
