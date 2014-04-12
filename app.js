@@ -64,6 +64,7 @@ http.createServer(app).listen(app.get('port'), function(){
 
 var pageId = '310212962461242';
 var url = 'http://graph.facebook.com/' + pageId;
+var sampleRate = 60 * 1000;
 
 setInterval(function(){
     var r = request.get(url, function(err, res, body) {
@@ -79,4 +80,4 @@ setInterval(function(){
             }
         });
     });
-}, 30000);
+}, sampleRate);
