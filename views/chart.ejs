@@ -21,6 +21,7 @@
 <head>
     <script src="http://d3js.org/d3.v3.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.13.0/javascript/semantic.min.js"></script>
     <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.13.0/css/semantic.css">
 </head>
 <body>
@@ -87,8 +88,19 @@
                 $('body').append($('<h3>').append('Start: ' + data[data.length-1].createdAt));
                 $('body').append($('<h3>').append('~'));
                 $('body').append($('<h3>').append('End: ' + data[0].createdAt));
+                $('.ui.page.dimmer').dimmer('hide');
             });
         });
 
     </script>
+    <script>
+        $(function(){
+            $('.ui.page.dimmer').dimmer('show');
+        });
+    </script>
+    <div class="ui page dimmer">
+        <div class="content">
+            <div class="center"><i class="massive loading icon"></i> Loading</div>
+        </div>
+    </div>
 </body>
