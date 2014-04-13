@@ -8,7 +8,7 @@
     },
     "dependencies": {
         "express": "3.4.8",
-        "jade": "*",
+        "ejs": "*",
         "request": "2",
         "mongoose": "*",
         "newrelic": "1.5",
