@@ -84,6 +84,9 @@
                 .attr("dy", ".71em")
                 .style("text-anchor", "end")
                 .text("Price ($)");
+                $('body').append($('<h3>').append('Start: ' + data[data.length-1].createdAt));
+                $('body').append($('<h3>').append('~'));
+                $('body').append($('<h3>').append('End: ' + data[0].createdAt));
             });
         });
 
