@@ -23,13 +23,13 @@
         <script src="http://d3js.org/d3.v3.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.0/jquery.min.js"></script>
         <script src="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.13.0/javascript/semantic.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.13.0/css/semantic.css">
+        <link rel="stylesheet" type="text/css" href="//cdnjs.cloudflare.com/ajax/libs/semantic-ui/0.13.0/css/semantic.min.css">
     </head>
     <body>
         <script>
 
             var margin = {top: 20, right: 20, bottom: 30, left: 50},
-            width = 960 - margin.left - margin.right,
+            width = 1024 - margin.left - margin.right,
             height = 700 - margin.top - margin.bottom;
 
             var parseDate = d3.time.format("%d-%b-%y").parse;
@@ -60,6 +60,7 @@
             .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
             $(function() {
+                $('.ui.page.dimmer').dimmer('show');
                 $.get('/api/fans?limit=5000', function(data) {
                     data = data.result;
                     console.log(data);
@@ -86,23 +87,26 @@
                     .attr("dy", ".71em")
                     .style("text-anchor", "end")
                     .text("Fans (people)");
-                    $('body').append($('<h3>').append('Start: ' + data[data.length-1].createdAt));
-                    $('body').append($('<h3>').append('~'));
-                    $('body').append($('<h3>').append('End: ' + data[0].createdAt));
+
+                    $('#start').append(data[data.length-1].createdAt);
+                    $('#end').append(data[0].createdAt);
                     $('.ui.page.dimmer').dimmer('hide');
                 });
             });
 
         </script>
-        <script>
-            $(function(){
-                $('.ui.page.dimmer').dimmer('show');
-            });
-        </script>
         <div class="ui page dimmer">
             <div class="content">
                 <div class="center"><i class="massive loading icon"></i> Loading</div>
             </div>
+        </div>
+        <div class="ui divided selection list">
+            <a class="item" id="start">
+                <div class="ui blue horizontal label">Start</div>
+            </a>
+            <a class="item" id="end">
+                <div class="ui blue horizontal label">End</div>
+            </a>
         </div>
     </body>
     <script>
