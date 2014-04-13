@@ -1,7 +1,7 @@
 var moment = require('moment-timezone');
 var request = require('request');
 var mongoose = require('mongoose');
-var Schema = mongoose.Schema;
+var Fans = require('./store/models').Fans; 
 
 process.env.TZ = 'Asia/Taipei';
 
@@ -21,20 +21,6 @@ mongoose.connect(uristring, function (err, res) {
         console.log ('Succeeded connected to: ' + uristring);
     }
 });
-
-var FansSchema = new Schema({ 
-    pageId: String,
-    likes: Number,
-    createdAt: { type: Date, default: Date.now },
-});
-FansSchema.methods.toJSON = function() {
-    var obj = this.toObject();
-    delete obj._id;
-    delete obj.__v;
-    obj.createdAt = moment(obj.createdAt).tz('Asia/Taipei').format();
-    return obj;
-}
-var Fans = mongoose.model('Fans', FansSchema);
 
 var pageId = '310212962461242';
 var url = 'http://graph.facebook.com/' + pageId;
