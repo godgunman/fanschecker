@@ -127,6 +127,7 @@ http.createServer(app).listen(app.get('port'), function(){
     console.log('Express server listening on port ' + app.get('port'));
 });
 
+/*
 var pageId = '310212962461242';
 var url = 'http://graph.facebook.com/' + pageId;
 var sampleRate = 60 * 1000;
@@ -146,3 +147,4 @@ setInterval(function(){
         });
     });
 }, sampleRate);
+*/
